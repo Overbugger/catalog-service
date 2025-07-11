@@ -1,0 +1,12 @@
+### POST request to add book
+POST http://localhost:9001/books
+Content-Type: application/json
+
+{
+  "author": "Lyra SilverStar",
+  "isbn": "1234567890",
+  "price": 10000,
+  "title": "Northern Lights"
+}
+
+###

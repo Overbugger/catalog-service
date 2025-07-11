@@ -1,0 +1,4 @@
+### GET request to example server
+GET http://localhost:9001/books/1234567890
+
+###
