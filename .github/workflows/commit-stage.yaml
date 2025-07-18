@@ -3,7 +3,7 @@ on: push
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: overbugger/catalog-service
+  IMAGE_NAME: polarbookshop/catalog-service
   VERSION: latest
 
 jobs:
@@ -23,7 +23,9 @@ jobs:
           java-version: 17
           cache: maven
       - name: Build, unit tests and integration tests
-        run: ./mvnw clean verify
+        run: |
+          chmod +x ./mvnw
+          ./mvnw clean verify
       - name: Code vulnerability scanning
         uses: anchore/scan-action@v3
         id: scan
@@ -36,6 +38,8 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
+        continue-on-error: true
+        continue-on-error: true
   package:
     name: Package and Publish
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -56,6 +60,7 @@ jobs:
           cache: maven
       - name: Build container image
         run: |
+          chmod +x ./mvnw
           ./mvnw clean package -DskipTests
           ./mvnw spring-boot:build-image \
             -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
